@@ -1,6 +1,7 @@
 <?php
-if($argc<2)
-{}
+if($argc<2){
+	
+}
 $user=$argv[1];
 $pwd =$argv[2];
 //参数1：访问的URL，参数2：post数据(不填则为GET)，参数3：提交的$cookies,参数4：是否返回$cookies
@@ -9,19 +10,7 @@ function curl_request($url,$post='',$cookie='', $returnCookie=0,$token=''){
 	curl_setopt($curl, CURLOPT_URL, $url);
 	curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)');
 	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-	// 	curl_setopt($curl, CURLOPT_AUTOREFERER, 1);
-	// 	curl_setopt($curl, CURLOPT_REFERER, "http://XXX");
 	if($post) {
-		/*if($token){
-			$headerAr = array(
-				'Content-type: application/json; charset=UTF-8',
-				'csrfToken:'.$token
-				);
-//			var_dump($header);
-			curl_setopt($curl, CURLOPT_HTTPHEADER,$headerAr);
-		}else{
-			curl_setopt($curl, CURLOPT_HTTPHEADER,  array('Content-type: application/json; charset=UTF-8'));
-		}*/
 		if($token){
 		curl_setopt($curl, CURLOPT_HTTPHEADER,  array('Content-type: application/json; charset=UTF-8'));
 		curl_setopt($curl, CURLOPT_HTTPHEADER,  array('csrfToken:'.$token));
@@ -49,43 +38,17 @@ function curl_request($url,$post='',$cookie='', $returnCookie=0,$token=''){
 		return curl_error($curl);
 	}
 
-	/*
-	//下载url地址的文件
-	$checkcode = "";
-	$acpath = "cache/imgcache/";
-	$dir = $acpath;
-
-	if(!file_exists($dir)){
-	mkdir($dir);
-	}
-
-	$acpath = $acpath.UuidUtil::getUuid();
-	$wr_path = $acpath;
-	if(@file_put_contents($wr_path."_checkcode.png", $data) && !curl_error($curl)) {
-	$checkcode = $acpath."_checkcode.png";
-	}
-
-	// 		// 获得响应结果里的：头大小
-	// 		$headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-	// 		// 根据头大小去获取头信息内容
-	// 		$header = substr($data, 0, $headerSize);
-
-	 */
 	curl_close($curl);
 	if($returnCookie){
 
 		list($header, $body) = explode("\r\n\r\n", $data, 2);
-//		var_dump($body);
 		preg_match_all("/Set\-Cookie:([^;]*);/", $header, $matches);
 		$info['cookie']  = $matches;
 		$info['content'] = $body;
 		if($token){
-	//	var_dump($header);
 		}
 		return $info;
 	}else{
-		// 			return $data;
-		//return '<img src='.$checkcode.'></img>';
 	}
 }
 
@@ -129,7 +92,7 @@ function getCsrfToken($request,$cookie,&$content,&$token){
 
 function randTitle($len) {
                 $titleArray = array(
-                                " battlefront"," ERP add battlefront DEV"," ERP upgrade"," battflefront upgrade"," ERP upgrade"," ERP add battlefront upgrade"," battlefront bug FIX","ERP bug FIX"
+                                "title1","title2"
                 );
 
                 $charsLen = count($titleArray) - 1;
@@ -143,7 +106,7 @@ function randTitle($len) {
 
 function randContent($len) {
                 $titleArray = array(
-                                ' Repair and development',' Repair and development as well as extraction *:smile:','bug fix *:innocent:'
+                                'this is remark','this is remark 2'
                 );
 
                 $charsLen = count($titleArray) - 1;
@@ -167,44 +130,33 @@ function createLogs($request,$cookie,&$content,$token){
 			"articleCommentable"=> true,
 			"articleType"=> 4,
 			"articleRewardContent"=>'',
-			"articleRewardPoint"=>'',
-//			'csrfToken'=>$token
+			"articleRewardPoint"=>''
                         );
    $ch = curl_init();
    curl_setopt($ch, CURLOPT_URL, $url);
    curl_setopt($ch, CURLOPT_HTTPHEADER, array('csrfToken: '.$token,'Host: symx.fangstar.net','Origin: http://symx.fangstar.net','X-Requested-With: XMLHttpRequest','Accept: */*','content-type:x-www-form-urlencoded;charset=utf8'));
-//   curl_setopt($ch, CURLOPT_HTTPHEADER, array('content-type:application/json;charset=utf8'));
+
    curl_setopt ($ch, CURLOPT_REFERER, $url);
   $User_Agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36';
    curl_setopt($ch, CURLOPT_USERAGENT, $User_Agent);
- //  curl_setopt($ch, CURLOPT_HEADER, 0);
-// post数据
+// post data
    curl_setopt($ch,CURLOPT_POST,1);
    curl_setopt($ch, CURLOPT_COOKIE, $cookie[1][0].";".$cookie[1][1]);
-// post的变量
+// post params
    curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($jsonData));
    $output = curl_exec($ch);
    curl_close($ch);
-//打印获得的数据
-//  print_r($output);
+//out put get's data
 $content = $output;
-
-
-/*
-        $jsonData = json_encode($jsonData);
-	$jsonCookie= json_encode($cookie);
-        $info = curl_request($url,$jsonData,$jsonCookie,1,$token);
-        $cookie = $info['cookie'];
-        $content= $info['content'];*/
 }
 
 
 $cookie=[];
 $content=[];
-$loginUrl='http://symx.fangstar.net/login'; 
-$checkInUrl='http://symx.fangstar.net/activity/daily-checkin';
-$logUrl = 'http://symx.fangstar.net/article';//自动加日志地址 
-$csrfTokenUrl = 'http://symx.fangstar.net/post?type=4&tags=%E8%88%AA%E6%B5%B7%E6%97%A5%E8%AE%B0,%E6%AE%B5%E8%90%BD';//获取csrfToken地址
+$loginUrl='http login url'; 
+$checkInUrl='daily checkin http url';
+$logUrl = 'logs url';
+$csrfTokenUrl = 'get csrfToken url'; 
 $req_login= array('url'=>$loginUrl,'user'=>$user,'pwd'=>$pwd);
 autologin($req_login,$cookie,$content);
 if($content){
@@ -213,10 +165,6 @@ if($content){
 		print_r('login suc \n');
 		$req_checkin= array('url'=>$checkInUrl);
 		checkIn($req_checkin,$cookie,$content);
-//		if($content){
-			//$content = json_decode($content);
-			//echo $content;
-//		}
 		echo 'checkin suc \n';
 
 		$req_token = array('url'=>$csrfTokenUrl);
@@ -232,7 +180,7 @@ if($content){
 		}
 		
 	}else{
-		echo '登录失败'.$content['msg'].' \n';
+		echo 'login fail'.$content['msg'].' \n';
 	}
 }else{
 	echo "login error \n";exit;
