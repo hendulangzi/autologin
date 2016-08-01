@@ -1,3 +1,3 @@
 # autologin
 autologin
-d
+http自动登录实现
