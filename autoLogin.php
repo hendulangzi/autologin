@@ -134,7 +134,7 @@ function createLogs($request,$cookie,&$content,$token){
                         );
    $ch = curl_init();
    curl_setopt($ch, CURLOPT_URL, $url);
-   curl_setopt($ch, CURLOPT_HTTPHEADER, array('csrfToken: '.$token,'Host: symx.fangstar.net','Origin: http://www.xxx.net','X-Requested-With: XMLHttpRequest','Accept: */*','content-type:x-www-form-urlencoded;charset=utf8'));
+   curl_setopt($ch, CURLOPT_HTTPHEADER, array('csrfToken: '.$token,'Host: xxxx.net','Origin: http://www.xxx.net','X-Requested-With: XMLHttpRequest','Accept: */*','content-type:x-www-form-urlencoded;charset=utf8'));
 
    curl_setopt ($ch, CURLOPT_REFERER, $url);
   $User_Agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36';
